@@ -178,6 +178,80 @@ async function classifyVideoWithLLM({ videoId, title, channel, description }) {
   }
 }
 
+// ---------- domain classification cache + LLM call (non-YouTube, non-listed sites) ----------
+
+async function getCachedDomain(host) {
+  const { domainCache } = await getLocal("domainCache");
+  return (domainCache || {})[host] || null;
+}
+
+async function cacheDomain(host, classification, meta) {
+  const { domainCache } = await getLocal("domainCache");
+  const cache = domainCache || {};
+  cache[host] = { classification, ts: Date.now(), ...meta };
+  await setLocal({ domainCache: cache });
+}
+
+async function classifyDomainWithLLM(host, title) {
+  const settings = await getSettings();
+  if (!settings.apiKey) return "neutral";
+
+  const system =
+    "You classify a WEBSITE as PRODUCTIVE, UNPRODUCTIVE, or NEUTRAL for a " +
+    "viewer whose productive activities are: AI/machine learning, computer " +
+    "science, software engineering, working on personal coding or " +
+    "data-science projects (e.g. GitHub, Kaggle), academic/research reading, " +
+    "and job or research applications. Entertainment sites — movie/TV/anime " +
+    "streaming (including free 'watch online' sites), social media feeds, " +
+    "gaming, and similar leisure browsing — are UNPRODUCTIVE. General-purpose " +
+    "tools with no leisure/entertainment signal (search engines, email, " +
+    "docs, utilities, news) are NEUTRAL. Respond with ONLY a JSON object " +
+    'like {"classification":"productive"}, {"classification":"unproductive"}, ' +
+    'or {"classification":"neutral"}. No other text.';
+
+  const userContent = `Domain: ${host}\nPage title: ${title || "(none)"}`;
+
+  try {
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-api-key": settings.apiKey,
+        "anthropic-version": "2023-06-01"
+      },
+      body: JSON.stringify({
+        model: HAIKU_MODEL,
+        max_tokens: 20,
+        system,
+        messages: [{ role: "user", content: userContent }]
+      })
+    });
+
+    if (!resp.ok) {
+      console.warn("Focus Tracker: domain classification failed", resp.status);
+      return "neutral";
+    }
+
+    const data = await resp.json();
+    const usage = data.usage || {};
+    const cost =
+      (usage.input_tokens || 0) * HAIKU_INPUT_COST_PER_TOKEN +
+      (usage.output_tokens || 0) * HAIKU_OUTPUT_COST_PER_TOKEN;
+    await addCost(cost);
+
+    const text = (data.content || [])
+      .map((b) => (b.type === "text" ? b.text : ""))
+      .join("");
+    const match = text.match(
+      /"classification"\s*:\s*"(productive|unproductive|neutral)"/i
+    );
+    return match ? match[1].toLowerCase() : "neutral";
+  } catch (err) {
+    console.warn("Focus Tracker: domain classification error", err);
+    return "neutral";
+  }
+}
+
 async function handleVideoDetected({ videoId, title, channel, description }) {
   const cached = await getCachedVideo(videoId);
   if (cached) {
@@ -214,8 +288,27 @@ async function updateForTab(tab) {
     }
     return;
   }
-  const classification = classifyUrl(tab.url);
-  await setClassification(classification, new URL(tab.url).hostname);
+  const host = new URL(tab.url).hostname.replace(/^www\./, "");
+  const staticClassification = classifyUrl(tab.url);
+  if (staticClassification !== "neutral") {
+    await setClassification(staticClassification, host);
+    return;
+  }
+
+  // Not on either static list — check the domain cache, else ask the LLM.
+  const cachedDomain = await getCachedDomain(host);
+  if (cachedDomain) {
+    await setClassification(cachedDomain.classification, host);
+    return;
+  }
+
+  await setClassification("neutral", host); // hold neutral while we wait on the API
+  const classification = await classifyDomainWithLLM(host, tab.title || "");
+  await cacheDomain(host, classification, { title: tab.title || "" });
+  // Only apply retroactively if the user is still on this domain.
+  if (state.activeDomain === host) {
+    await setClassification(classification, host);
+  }
 }
 
 async function getActiveTab() {

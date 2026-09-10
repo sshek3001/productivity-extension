@@ -33,7 +33,33 @@ export const UNPRODUCTIVE_DOMAINS = [
   "facebook.com",
   "twitch.tv",
   "hulu.com",
-  "primevideo.com"
+  "primevideo.com",
+  // free streaming / "watch" sites
+  "aether.ist",
+  "cinejoy.to",
+  "movy.sx",
+  "popcornmovies.ac",
+  "bingebox.ac",
+  "rivestream.app",
+  "rivestream.ru",
+  "rivestream.vip",
+  "corsflix.net",
+  "corsflix.dpdns.org",
+  "flixer.gd",
+  "flixer.su",
+  "hexa.su",
+  "bcine.ru",
+  "bingey.cfd",
+  "7movies.in",
+  "7movies.pro",
+  "shuttletv.su",
+  "shuttletv.pk",
+  "67movies.st",
+  "phantomflix.net",
+  "meowtv.ru",
+  "flickystream.mov",
+  "reelix.ac",
+  "coreflix.tv"
 ];
 
 /**

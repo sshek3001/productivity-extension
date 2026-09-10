@@ -42,11 +42,17 @@ icon on the extension card to pick up the change.
 
 ## Known limitations / things worth knowing
 
-- **Video reclassification**: once a video is classified, it's cached
-  forever by video ID. If you want to force a re-check (e.g. you tightened
-  the prompt), clear the `videoCache` key via the extensions page's
-  "Inspect views: service worker" console:
-  `chrome.storage.local.remove('videoCache')`.
+- **Video/domain reclassification**: once a video or a non-listed domain is
+  classified, it's cached forever (by video ID / hostname). If you want to
+  force a re-check (e.g. you tightened the prompt), clear the cache via the
+  extensions page's "Inspect views: service worker" console:
+  `chrome.storage.local.remove(['videoCache', 'domainCache'])`.
+- **Any site not in `rules.js`** (streaming sites, random new domains, etc.)
+  now gets auto-classified by Haiku the first time you visit it — using the
+  hostname + page title — and cached from then on. You don't need to
+  hand-add every new streaming site anymore; `rules.js`'s static lists are
+  just a fast-path for well-known domains you want to guarantee are
+  classified without an API call.
 - **Idle detection** treats you as idle after 60 seconds of no input; that
   time isn't counted toward either bucket.
 - **Multiple windows**: only the currently focused tab in the currently
