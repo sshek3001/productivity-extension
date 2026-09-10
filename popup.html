@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Focus Tracker</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <main class="panel">
+    <header>
+      <span class="dot"></span>
+      <h1>Focus Tracker</h1>
+    </header>
+
+    <section class="stats">
+      <div class="stat-row">
+        <span class="label productive">Productive</span>
+        <span class="value" id="productiveVal">0m</span>
+      </div>
+      <div class="stat-row">
+        <span class="label unproductive">Unproductive</span>
+        <span class="value" id="unproductiveVal">0m</span>
+      </div>
+      <div class="stat-row">
+        <span class="label neutral">Neutral</span>
+        <span class="value" id="neutralVal">0m</span>
+      </div>
+    </section>
+
+    <section class="budget">
+      <div class="budget-bar-track">
+        <div class="budget-bar-fill" id="budgetFill"></div>
+      </div>
+      <p class="budget-caption" id="budgetCaption">0 / 60 min unproductive today</p>
+    </section>
+
+    <section class="cost">
+      <span>Classifier spend this month</span>
+      <strong id="costVal">$0.00</strong>
+    </section>
+
+    <details class="settings">
+      <summary>Settings</summary>
+      <label>
+        Anthropic API key
+        <input type="password" id="apiKey" placeholder="sk-ant-..." autocomplete="off" />
+      </label>
+      <label>
+        Daily unproductive budget (minutes)
+        <input type="number" id="dailyBudgetMinutes" min="0" />
+      </label>
+      <label>
+        Nag interval once over budget (minutes)
+        <input type="number" id="nagIntervalMinutes" min="1" />
+      </label>
+      <button id="saveBtn">Save</button>
+      <p class="saved-msg" id="savedMsg">Saved.</p>
+    </details>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>
