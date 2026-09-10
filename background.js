@@ -1,6 +1,6 @@
 import { classifyUrl, isYouTube } from "./rules.js";
+import { VIDEO_SYSTEM_PROMPT, DOMAIN_SYSTEM_PROMPT, HAIKU_MODEL } from "./prompts.js";
 
-const HAIKU_MODEL = "claude-haiku-4-5-20251001";
 const HAIKU_INPUT_COST_PER_TOKEN = 1.0 / 1_000_000;
 const HAIKU_OUTPUT_COST_PER_TOKEN = 5.0 / 1_000_000;
 
@@ -21,10 +21,17 @@ async function setLocal(obj) {
 }
 
 function todayKey() {
-  return new Date().toISOString().slice(0, 10); // "2026-09-09"
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`; // local calendar date, e.g. "2026-09-09"
 }
 function monthKey() {
-  return new Date().toISOString().slice(0, 7); // "2026-09"
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  return `${y}-${m}`; // local calendar month
 }
 
 async function getSettings() {
@@ -147,16 +154,7 @@ async function classifyVideoWithLLM({ videoId, title, channel, description }) {
     return "neutral";
   }
 
-  const system =
-    "You classify a single YouTube video as PRODUCTIVE or UNPRODUCTIVE for " +
-    "a viewer who considers the following productive: AI/machine learning, " +
-    "computer science, software engineering, programming tutorials, research " +
-    "papers/talks, and content directly related to their own projects, job " +
-    "search, or research applications. Everything else (entertainment, vlogs, " +
-    "gaming, music, general streaming/comedy/lifestyle content, etc.) is " +
-    "unproductive. Respond with ONLY a JSON object like " +
-    '{"classification":"productive"} or {"classification":"unproductive"}. ' +
-    "No other text.";
+  const system = VIDEO_SYSTEM_PROMPT;
 
   const userContent =
     `Title: ${title}\nChannel: ${channel}\n` +
@@ -196,8 +194,12 @@ async function classifyVideoWithLLM({ videoId, title, channel, description }) {
       .map((b) => (b.type === "text" ? b.text : ""))
       .join("");
     const match = text.match(/"classification"\s*:\s*"(productive|unproductive)"/i);
-    if (match) return match[1].toLowerCase();
-    return "neutral";
+    const result = match ? match[1].toLowerCase() : "neutral";
+    console.log(
+      `[Focus Tracker] VIDEO classify → "${title}" (${channel}) => ${result}`,
+      { raw: text }
+    );
+    return result;
   } catch (err) {
     console.warn("Focus Tracker: classification error", err);
     return "neutral"; // never let an API/network hiccup break tracking
@@ -222,18 +224,7 @@ async function classifyDomainWithLLM(host, title) {
   const settings = await getSettings();
   if (!settings.apiKey) return "neutral";
 
-  const system =
-    "You classify a WEBSITE as PRODUCTIVE, UNPRODUCTIVE, or NEUTRAL for a " +
-    "viewer whose productive activities are: AI/machine learning, computer " +
-    "science, software engineering, working on personal coding or " +
-    "data-science projects (e.g. GitHub, Kaggle), academic/research reading, " +
-    "and job or research applications. Entertainment sites — movie/TV/anime " +
-    "streaming (including free 'watch online' sites), social media feeds, " +
-    "gaming, and similar leisure browsing — are UNPRODUCTIVE. General-purpose " +
-    "tools with no leisure/entertainment signal (search engines, email, " +
-    "docs, utilities, news) are NEUTRAL. Respond with ONLY a JSON object " +
-    'like {"classification":"productive"}, {"classification":"unproductive"}, ' +
-    'or {"classification":"neutral"}. No other text.';
+  const system = DOMAIN_SYSTEM_PROMPT;
 
   const userContent = `Domain: ${host}\nPage title: ${title || "(none)"}`;
 
@@ -271,7 +262,12 @@ async function classifyDomainWithLLM(host, title) {
     const match = text.match(
       /"classification"\s*:\s*"(productive|unproductive|neutral)"/i
     );
-    return match ? match[1].toLowerCase() : "neutral";
+    const result = match ? match[1].toLowerCase() : "neutral";
+    console.log(
+      `[Focus Tracker] DOMAIN classify → "${host}" ("${title}") => ${result}`,
+      { raw: text }
+    );
+    return result;
   } catch (err) {
     console.warn("Focus Tracker: domain classification error", err);
     return "neutral";

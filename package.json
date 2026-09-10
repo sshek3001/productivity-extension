@@ -1,0 +1,9 @@
+{
+  "name": "focus-tracker-test-harness",
+  "private": true,
+  "type": "module",
+  "description": "Not part of the Chrome extension itself — only used to run test-classifier.js locally with Node.",
+  "scripts": {
+    "test": "node --env-file=.env test-classifier.js"
+  }
+}

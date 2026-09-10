@@ -1,0 +1,19 @@
+{
+  "videoCases": [
+    { "title": "Building a Transformer from Scratch", "channel": "Andrej Karpathy", "expected": "productive" },
+    { "title": "But what is a neural network?", "channel": "3Blue1Brown", "expected": "productive" },
+    { "title": "My Kaggle Competition Journey: Top 1%", "channel": "AI with Alex", "expected": "productive" },
+    { "title": "$1 vs $500,000 Vacation!", "channel": "MrBeast", "expected": "unproductive" },
+    { "title": "REACTING to my ex's new relationship", "channel": "VlogsDaily", "expected": "unproductive" },
+    { "title": "Full Movie: Action Thriller 2026", "channel": "MovieClipsHD", "expected": "unproductive" },
+    { "title": "Day in my life as an ML engineer", "channel": "TechWithSarah", "expected": "productive" },
+    { "title": "Minecraft but everything is chaos", "channel": "GamerX", "expected": "unproductive" }
+  ],
+  "domainCases": [
+    { "host": "cinejoy.to", "title": "Watch Movies Online Free", "expected": "unproductive" },
+    { "host": "randomnewsite.tv", "title": "Stream Anime & TV Shows Free", "expected": "unproductive" },
+    { "host": "leetcode.com", "title": "Two Sum - LeetCode", "expected": "productive" },
+    { "host": "gmail.com", "title": "Inbox (14) - name@gmail.com", "expected": "neutral" },
+    { "host": "some-blog.dev", "title": "Notes on distributed systems", "expected": "productive" }
+  ]
+}
