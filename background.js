@@ -62,12 +62,36 @@ async function addCost(usd) {
   await setLocal({ costLog: log });
 }
 
+// Per-activity breakdown, so we can answer "what were my top unproductive
+// things today" instead of just a single aggregate number.
+async function addBreakdown(classification, label, seconds) {
+  if (!label || seconds <= 0) return;
+  const { breakdownLog } = await getLocal("breakdownLog");
+  const log = breakdownLog || {};
+  const dateKey = todayKey();
+  log[dateKey] = log[dateKey] || {};
+  log[dateKey][classification] = log[dateKey][classification] || {};
+  log[dateKey][classification][label] =
+    (log[dateKey][classification][label] || 0) + seconds;
+  await setLocal({ breakdownLog: log });
+}
+
+async function getTopActivities(classification, dateKey, limit = 3) {
+  const { breakdownLog } = await getLocal("breakdownLog");
+  const dayEntry = ((breakdownLog || {})[dateKey] || {})[classification] || {};
+  return Object.entries(dayEntry)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, limit)
+    .map(([label, seconds]) => ({ label, seconds }));
+}
+
 // ---------- in-memory tracking state ----------
 // (persisted to storage too, so a service-worker restart can recover)
 
 let state = {
   activeDomain: null, // hostname or "youtube" or "idle"
   activeVideoId: null,
+  activeLabel: null, // human-readable activity label used for the breakdown
   classification: "neutral",
   lastTimestamp: Date.now(),
   lastNagTimestamp: 0
@@ -87,16 +111,18 @@ async function flush() {
   const elapsedSec = Math.round((now - state.lastTimestamp) / 1000);
   if (elapsedSec > 0) {
     await addSeconds(state.classification, elapsedSec);
+    await addBreakdown(state.classification, state.activeLabel || state.activeDomain, elapsedSec);
   }
   state.lastTimestamp = now;
   await persistState();
 }
 
-async function setClassification(newClassification, domain, videoId = null) {
+async function setClassification(newClassification, domain, videoId = null, label = null) {
   await flush();
   state.classification = newClassification;
   state.activeDomain = domain;
   state.activeVideoId = videoId;
+  state.activeLabel = label || domain;
   await persistState();
 }
 
@@ -253,13 +279,14 @@ async function classifyDomainWithLLM(host, title) {
 }
 
 async function handleVideoDetected({ videoId, title, channel, description }) {
+  const label = channel ? `${title} (${channel})` : title;
   const cached = await getCachedVideo(videoId);
   if (cached) {
-    await setClassification(cached.classification, "youtube", videoId);
+    await setClassification(cached.classification, "youtube", videoId, label);
     return;
   }
   // Mark neutral immediately so time isn't mis-tallied while we wait on the API.
-  await setClassification("neutral", "youtube", videoId);
+  await setClassification("neutral", "youtube", videoId, label);
   const classification = await classifyVideoWithLLM({
     videoId,
     title,
@@ -269,7 +296,7 @@ async function handleVideoDetected({ videoId, title, channel, description }) {
   await cacheVideo(videoId, classification, { title, channel });
   // Only apply retroactively if we're still on the same video.
   if (state.activeVideoId === videoId) {
-    await setClassification(classification, "youtube", videoId);
+    await setClassification(classification, "youtube", videoId, label);
   }
 }
 

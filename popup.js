@@ -13,10 +13,11 @@ function monthKey() {
 }
 
 async function render() {
-  const { dailyLog, settings, costLog } = await chrome.storage.local.get([
+  const { dailyLog, settings, costLog, breakdownLog } = await chrome.storage.local.get([
     "dailyLog",
     "settings",
-    "costLog"
+    "costLog",
+    "breakdownLog"
   ]);
   const merged = { ...DEFAULT_SETTINGS, ...(settings || {}) };
   const entry = (dailyLog || {})[todayKey()] || {
@@ -44,6 +45,33 @@ async function render() {
   document.getElementById("apiKey").value = merged.apiKey;
   document.getElementById("dailyBudgetMinutes").value = merged.dailyBudgetMinutes;
   document.getElementById("nagIntervalMinutes").value = merged.nagIntervalMinutes;
+
+  const todayBreakdown = ((breakdownLog || {})[todayKey()] || {}).unproductive || {};
+  const top = Object.entries(todayBreakdown)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3);
+
+  const list = document.getElementById("topUnproductive");
+  const emptyMsg = document.getElementById("topUnproductiveEmpty");
+  list.innerHTML = "";
+  if (top.length === 0) {
+    emptyMsg.classList.add("show");
+  } else {
+    emptyMsg.classList.remove("show");
+    for (const [label, seconds] of top) {
+      const li = document.createElement("li");
+      const labelSpan = document.createElement("span");
+      labelSpan.className = "item-label";
+      labelSpan.textContent = label;
+      labelSpan.title = label; // full text on hover, since it's truncated visually
+      const timeSpan = document.createElement("span");
+      timeSpan.className = "item-time";
+      timeSpan.textContent = `${mins(seconds)}m`;
+      li.appendChild(labelSpan);
+      li.appendChild(timeSpan);
+      list.appendChild(li);
+    }
+  }
 }
 
 document.getElementById("saveBtn").addEventListener("click", async () => {
