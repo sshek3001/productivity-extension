@@ -1,0 +1,281 @@
+{
+  "ranAt": "2026-09-12T00:55:39.844Z",
+  "passCount": 13,
+  "total": 13,
+  "totalCost": 0.0028259999999999995,
+  "results": [
+    {
+      "kind": "video",
+      "title": "Building a Transformer from Scratch",
+      "channel": "Andrej Karpathy",
+      "expected": "productive",
+      "actual": "productive",
+      "raw": "```json\n{\"classification\":\"productive\"}\n```",
+      "usage": {
+        "input_tokens": 139,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 13,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      },
+      "pass": true
+    },
+    {
+      "kind": "video",
+      "title": "But what is a neural network?",
+      "channel": "3Blue1Brown",
+      "expected": "productive",
+      "actual": "productive",
+      "raw": "{\"classification\":\"productive\"}",
+      "usage": {
+        "input_tokens": 137,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      },
+      "pass": true
+    },
+    {
+      "kind": "video",
+      "title": "My Kaggle Competition Journey: Top 1%",
+      "channel": "AI with Alex",
+      "expected": "productive",
+      "actual": "productive",
+      "raw": "{\"classification\":\"productive\"}",
+      "usage": {
+        "input_tokens": 139,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      },
+      "pass": true
+    },
+    {
+      "kind": "video",
+      "title": "$1 vs $500,000 Vacation!",
+      "channel": "MrBeast",
+      "expected": "unproductive",
+      "actual": "unproductive",
+      "raw": "```json\n{\"classification\":\"unproductive\"}\n```",
+      "usage": {
+        "input_tokens": 141,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 15,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      },
+      "pass": true
+    },
+    {
+      "kind": "video",
+      "title": "REACTING to my ex's new relationship",
+      "channel": "VlogsDaily",
+      "expected": "unproductive",
+      "actual": "unproductive",
+      "raw": "```json\n{\"classification\":\"unproductive\"}\n```",
+      "usage": {
+        "input_tokens": 138,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 15,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      },
+      "pass": true
+    },
+    {
+      "kind": "video",
+      "title": "Full Movie: Action Thriller 2026",
+      "channel": "MovieClipsHD",
+      "expected": "unproductive",
+      "actual": "unproductive",
+      "raw": "```json\n{\"classification\":\"unproductive\"}\n```",
+      "usage": {
+        "input_tokens": 139,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 15,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      },
+      "pass": true
+    },
+    {
+      "kind": "video",
+      "title": "Day in my life as an ML engineer",
+      "channel": "TechWithSarah",
+      "expected": "productive",
+      "actual": "productive",
+      "raw": "```json\n{\"classification\":\"productive\"}\n```",
+      "usage": {
+        "input_tokens": 139,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 13,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      },
+      "pass": true
+    },
+    {
+      "kind": "video",
+      "title": "Minecraft but everything is chaos",
+      "channel": "GamerX",
+      "expected": "unproductive",
+      "actual": "unproductive",
+      "raw": "{\"classification\":\"unproductive\"}",
+      "usage": {
+        "input_tokens": 134,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 10,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      },
+      "pass": true
+    },
+    {
+      "kind": "domain",
+      "host": "cinejoy.to",
+      "title": "Watch Movies Online Free",
+      "expected": "unproductive",
+      "actual": "unproductive",
+      "raw": "```json\n{\"classification\":\"unproductive\"}\n```",
+      "usage": {
+        "input_tokens": 186,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 15,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      },
+      "pass": true
+    },
+    {
+      "kind": "domain",
+      "host": "randomnewsite.tv",
+      "title": "Stream Anime & TV Shows Free",
+      "expected": "unproductive",
+      "actual": "unproductive",
+      "raw": "```json\n{\"classification\":\"unproductive\"}\n```",
+      "usage": {
+        "input_tokens": 190,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 15,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      },
+      "pass": true
+    },
+    {
+      "kind": "domain",
+      "host": "leetcode.com",
+      "title": "Two Sum - LeetCode",
+      "expected": "productive",
+      "actual": "productive",
+      "raw": "{\"classification\":\"productive\"}",
+      "usage": {
+        "input_tokens": 187,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      },
+      "pass": true
+    },
+    {
+      "kind": "domain",
+      "host": "gmail.com",
+      "title": "Inbox (14) - name@gmail.com",
+      "expected": "neutral",
+      "actual": "neutral",
+      "raw": "{\"classification\":\"neutral\"}",
+      "usage": {
+        "input_tokens": 191,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      },
+      "pass": true
+    },
+    {
+      "kind": "domain",
+      "host": "some-blog.dev",
+      "title": "Notes on distributed systems",
+      "expected": "productive",
+      "actual": "productive",
+      "raw": "```json\n{\"classification\":\"productive\"}\n```",
+      "usage": {
+        "input_tokens": 186,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 13,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      },
+      "pass": true
+    }
+  ]
+}

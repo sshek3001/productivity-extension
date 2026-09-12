@@ -1,5 +1,6 @@
 import { classifyUrl, isYouTube } from "./rules.js";
 import { VIDEO_SYSTEM_PROMPT, DOMAIN_SYSTEM_PROMPT, HAIKU_MODEL } from "./prompts.js";
+import { LOCAL_ANTHROPIC_API_KEY } from "./secrets.local.js";
 
 const HAIKU_INPUT_COST_PER_TOKEN = 1.0 / 1_000_000;
 const HAIKU_OUTPUT_COST_PER_TOKEN = 5.0 / 1_000_000;
@@ -36,7 +37,9 @@ function monthKey() {
 
 async function getSettings() {
   const { settings } = await getLocal("settings");
-  return { ...DEFAULT_SETTINGS, ...(settings || {}) };
+  const merged = { ...DEFAULT_SETTINGS, ...(settings || {}) };
+  if (!merged.apiKey) merged.apiKey = LOCAL_ANTHROPIC_API_KEY || "";
+  return merged;
 }
 
 async function getDailyLog(dateKey) {
@@ -359,14 +362,23 @@ chrome.windows.onFocusChanged.addListener(async (windowId) => {
   }
 });
 
-chrome.idle.setDetectionInterval(60);
+chrome.idle.setDetectionInterval(180);
 chrome.idle.onStateChanged.addListener(async (newState) => {
-  if (newState === "idle" || newState === "locked") {
+  if (newState === "locked") {
     await setClassification("neutral", "idle");
-  } else {
-    const tab = await getActiveTab();
-    await updateForTab(tab);
+    return;
   }
+  if (newState === "idle") {
+    // Lack of keyboard/mouse input doesn't mean the user isn't watching or
+    // listening — don't override the current classification if the active
+    // tab is playing audio/video.
+    const tab = await getActiveTab();
+    if (tab && tab.audible) return;
+    await setClassification("neutral", "idle");
+    return;
+  }
+  const tab = await getActiveTab();
+  await updateForTab(tab);
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {

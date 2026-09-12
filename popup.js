@@ -49,7 +49,6 @@ async function render() {
   const monthCost = (costLog || {})[monthKey()] || 0;
   document.getElementById("costVal").textContent = `$${monthCost.toFixed(4)}`;
 
-  document.getElementById("apiKey").value = merged.apiKey;
   document.getElementById("dailyBudgetMinutes").value = merged.dailyBudgetMinutes;
   document.getElementById("nagIntervalMinutes").value = merged.nagIntervalMinutes;
 
@@ -82,8 +81,9 @@ async function render() {
 }
 
 document.getElementById("saveBtn").addEventListener("click", async () => {
+  const { settings: existing } = await chrome.storage.local.get("settings");
   const settings = {
-    apiKey: document.getElementById("apiKey").value.trim(),
+    apiKey: (existing || {}).apiKey || "",
     dailyBudgetMinutes: Number(document.getElementById("dailyBudgetMinutes").value) || 60,
     nagIntervalMinutes: Number(document.getElementById("nagIntervalMinutes").value) || 10,
     monthlyCostWarningUSD: DEFAULT_SETTINGS.monthlyCostWarningUSD
