@@ -217,3 +217,21 @@ h1 {
 .saved-msg.show {
   display: block;
 }
+
+.dsa-link {
+  margin-top: 10px;
+  width: 100%;
+  padding: 8px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dsa-link:hover {
+  border-color: var(--productive);
+  color: var(--productive);
+}

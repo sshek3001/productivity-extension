@@ -95,6 +95,10 @@ document.getElementById("saveBtn").addEventListener("click", async () => {
   render();
 });
 
+document.getElementById("openDsaBtn").addEventListener("click", () => {
+  chrome.tabs.create({ url: chrome.runtime.getURL("dsa.html") });
+});
+
 render();
 // Refresh live while the popup is open.
 setInterval(render, 5000);

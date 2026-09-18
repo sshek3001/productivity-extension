@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DSA Log — Focus Tracker</title>
+  <link rel="stylesheet" href="dsa.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="top">
+      <span class="dot"></span>
+      <h1>DSA Problem Log</h1>
+    </header>
+
+    <section class="entry-card">
+      <label>
+        Date
+        <input type="date" id="entryDate" />
+      </label>
+      <label>
+        Problems solved
+        <input type="number" id="entryCount" min="0" step="1" />
+      </label>
+      <button id="saveBtn">Save</button>
+      <span class="saved-msg" id="savedMsg">Saved.</span>
+    </section>
+
+    <section class="stats-row" id="statsRow">
+      <div class="stat-tile">
+        <span class="stat-label">Today</span>
+        <span class="stat-value" id="statToday">0</span>
+      </div>
+      <div class="stat-tile">
+        <span class="stat-label">This week</span>
+        <span class="stat-value" id="statWeek">0</span>
+      </div>
+      <div class="stat-tile">
+        <span class="stat-label">This month</span>
+        <span class="stat-value" id="statMonth">0</span>
+      </div>
+      <div class="stat-tile">
+        <span class="stat-label">This year</span>
+        <span class="stat-value" id="statYear">0</span>
+      </div>
+    </section>
+
+    <section class="chart-card">
+      <div class="chart-tabs">
+        <button class="tab-btn active" data-range="week">Weekly</button>
+        <button class="tab-btn" data-range="month">Monthly</button>
+        <button class="tab-btn" data-range="year">Yearly</button>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="chart" width="900" height="360"></canvas>
+        <div class="tooltip" id="tooltip"></div>
+      </div>
+    </section>
+  </main>
+  <script src="dsa.js"></script>
+</body>
+</html>
