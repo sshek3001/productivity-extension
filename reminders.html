@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Reminders — Focus Tracker</title>
+  <link rel="stylesheet" href="reminders.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="top">
+      <span class="dot"></span>
+      <h1>Reminders</h1>
+    </header>
+
+    <section class="entry-card">
+      <label>
+        Subject
+        <input type="text" id="entrySubject" placeholder="e.g. Assignment 3" />
+      </label>
+      <label>
+        Due date
+        <input type="date" id="entryDue" />
+      </label>
+      <button id="addBtn">Add</button>
+      <span class="saved-msg" id="savedMsg">Added.</span>
+    </section>
+
+    <section class="table-card">
+      <table id="remindersTable">
+        <thead>
+          <tr>
+            <th>Subject</th>
+            <th>Due date</th>
+            <th class="col-submitted">Submitted</th>
+            <th class="col-actions"></th>
+          </tr>
+        </thead>
+        <tbody id="remindersBody"></tbody>
+      </table>
+      <p class="empty-msg" id="emptyMsg">No reminders yet.</p>
+    </section>
+  </main>
+  <script src="reminders.js"></script>
+</body>
+</html>

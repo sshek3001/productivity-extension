@@ -1,0 +1,206 @@
+:root {
+  --bg: #0f1720;
+  --panel: #16212c;
+  --border: #26333f;
+  --text: #e6edf3;
+  --muted: #7d8b98;
+  --accent: #34d399;
+  --danger: #f87171;
+  --done-bg: rgba(52, 211, 153, 0.16);
+  --done-border: rgba(52, 211, 153, 0.4);
+  --mono: "SF Mono", "Cascadia Code", Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+}
+
+.page {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 28px 24px 40px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
+
+h1 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+.entry-card {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.entry-card label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.entry-card input {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text);
+  padding: 7px 9px;
+  font-family: var(--mono);
+  font-size: 13px;
+  min-width: 200px;
+}
+
+.entry-card input[type="date"] {
+  min-width: 140px;
+}
+
+.entry-card button {
+  padding: 8px 18px;
+  background: var(--accent);
+  color: #05130d;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  height: 33px;
+}
+
+.entry-card button:hover {
+  filter: brightness(1.05);
+}
+
+.saved-msg {
+  color: var(--accent);
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.saved-msg.show {
+  opacity: 1;
+}
+
+.table-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 18px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th {
+  text-align: left;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.col-submitted,
+.col-actions {
+  text-align: center;
+  width: 90px;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+tbody td {
+  padding: 10px;
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+tbody tr.done {
+  background: var(--done-bg);
+}
+
+tbody tr.done td {
+  color: var(--accent);
+}
+
+.col-submitted {
+  text-align: center;
+}
+
+.col-submitted input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.col-actions {
+  text-align: center;
+}
+
+.delete-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 5px;
+  padding: 4px 9px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.delete-btn:hover {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.empty-msg {
+  color: var(--muted);
+  text-align: center;
+  padding: 20px 0;
+  margin: 0;
+}
+
+.empty-msg.hide {
+  display: none;
+}

@@ -99,6 +99,10 @@ document.getElementById("openDsaBtn").addEventListener("click", () => {
   chrome.tabs.create({ url: chrome.runtime.getURL("dsa.html") });
 });
 
+document.getElementById("openRemindersBtn").addEventListener("click", () => {
+  chrome.tabs.create({ url: chrome.runtime.getURL("reminders.html") });
+});
+
 render();
 // Refresh live while the popup is open.
 setInterval(render, 5000);
