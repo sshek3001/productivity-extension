@@ -25,6 +25,17 @@ nags you (no hard blocking) when you go over your daily "unproductive" budget.
    Create Key). Set your daily unproductive budget and nag interval, then
    **Save**.
 
+## Dev setup: secret-scanning pre-commit hook
+
+This repo ships a git hook (`.githooks/pre-commit`) that blocks commits which
+stage `.env`/`secrets.local.js`/private keys or content matching common secret
+patterns (API keys, tokens). It's not enabled by default per clone — run this
+once after cloning:
+
+```
+git config core.hooksPath .githooks
+```
+
 ## Customizing what counts as productive
 
 Edit `rules.js`:
