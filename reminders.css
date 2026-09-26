@@ -135,10 +135,14 @@ thead th {
   border-bottom: 1px solid var(--border);
 }
 
-.col-submitted,
-.col-actions {
+.col-submitted {
   text-align: center;
   width: 90px;
+}
+
+.col-actions {
+  text-align: center;
+  width: 140px;
 }
 
 tbody tr {
@@ -179,7 +183,12 @@ tbody tr.done td {
   text-align: center;
 }
 
-.delete-btn {
+.col-actions button {
+  margin: 0 3px;
+}
+
+.delete-btn,
+.edit-btn {
   background: transparent;
   border: 1px solid var(--border);
   color: var(--muted);
@@ -192,6 +201,22 @@ tbody tr.done td {
 .delete-btn:hover {
   color: var(--danger);
   border-color: var(--danger);
+}
+
+.edit-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.edit-input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text);
+  padding: 5px 7px;
+  font-family: var(--mono);
+  font-size: 12.5px;
 }
 
 .empty-msg {

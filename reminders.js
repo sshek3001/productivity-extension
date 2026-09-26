@@ -1,4 +1,5 @@
 let reminders = [];
+let editingId = null;
 
 async function loadReminders() {
   const { reminders: list } = await chrome.storage.local.get("reminders");
@@ -40,27 +41,76 @@ function render() {
     tr.dataset.id = r.id;
     if (r.submitted) tr.classList.add("done");
 
-    const subjectTd = document.createElement("td");
-    subjectTd.textContent = r.subject;
+    const isEditing = editingId === r.id;
 
+    const subjectTd = document.createElement("td");
     const dueTd = document.createElement("td");
-    dueTd.textContent = formatDue(r.due);
+
+    if (isEditing) {
+      const subjectInput = document.createElement("input");
+      subjectInput.type = "text";
+      subjectInput.className = "edit-input";
+      subjectInput.value = r.subject;
+      subjectTd.appendChild(subjectInput);
+
+      const dueInput = document.createElement("input");
+      dueInput.type = "date";
+      dueInput.className = "edit-input";
+      dueInput.value = r.due || "";
+      dueTd.appendChild(dueInput);
+
+      subjectTd._input = subjectInput;
+      dueTd._input = dueInput;
+    } else {
+      subjectTd.textContent = r.subject;
+      dueTd.textContent = formatDue(r.due);
+    }
 
     const submittedTd = document.createElement("td");
     submittedTd.className = "col-submitted";
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.checked = !!r.submitted;
+    checkbox.disabled = isEditing;
     checkbox.addEventListener("change", () => toggleSubmitted(r.id, checkbox.checked));
     submittedTd.appendChild(checkbox);
 
     const actionsTd = document.createElement("td");
     actionsTd.className = "col-actions";
-    const delBtn = document.createElement("button");
-    delBtn.className = "delete-btn";
-    delBtn.textContent = "Delete";
-    delBtn.addEventListener("click", () => deleteReminder(r.id));
-    actionsTd.appendChild(delBtn);
+
+    if (isEditing) {
+      const saveBtn = document.createElement("button");
+      saveBtn.className = "edit-btn";
+      saveBtn.textContent = "Save";
+      saveBtn.addEventListener("click", () =>
+        commitEdit(r.id, subjectTd._input.value, dueTd._input.value)
+      );
+
+      const cancelBtn = document.createElement("button");
+      cancelBtn.className = "delete-btn";
+      cancelBtn.textContent = "Cancel";
+      cancelBtn.addEventListener("click", () => {
+        editingId = null;
+        render();
+      });
+
+      actionsTd.append(saveBtn, cancelBtn);
+    } else {
+      const editBtn = document.createElement("button");
+      editBtn.className = "edit-btn";
+      editBtn.textContent = "Edit";
+      editBtn.addEventListener("click", () => {
+        editingId = r.id;
+        render();
+      });
+
+      const delBtn = document.createElement("button");
+      delBtn.className = "delete-btn";
+      delBtn.textContent = "Delete";
+      delBtn.addEventListener("click", () => deleteReminder(r.id));
+
+      actionsTd.append(editBtn, delBtn);
+    }
 
     tr.append(subjectTd, dueTd, submittedTd, actionsTd);
     body.appendChild(tr);
@@ -97,6 +147,19 @@ async function toggleSubmitted(id, submitted) {
   r.submitted = submitted;
   await saveReminders();
   render();
+}
+
+async function commitEdit(id, subject, due) {
+  const trimmed = subject.trim();
+  if (!trimmed) return;
+  const r = reminders.find((x) => x.id === id);
+  if (!r) return;
+  r.subject = trimmed;
+  r.due = due;
+  editingId = null;
+  await saveReminders();
+  render();
+  flashSaved();
 }
 
 async function deleteReminder(id) {
