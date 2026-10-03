@@ -70,25 +70,24 @@ function buildSeries(range) {
   const today = startOfDay(new Date());
   let start, end;
   if (range === "week") {
-    start = startOfWeek(today);
-    end = addDays(start, 6);
+    end = today;
+    start = addDays(today, -6);
   } else if (range === "month") {
-    start = startOfMonth(today);
-    end = endOfMonth(today);
+    end = today;
+    start = addDays(today, -29);
   } else {
-    start = startOfYear(today);
-    end = endOfYear(today);
+    end = today;
+    start = addDays(today, -364);
   }
 
   const points = [];
   let cursor = start;
   while (cursor <= end) {
     const key = dateKey(cursor);
-    const isFuture = cursor > today;
     points.push({
       date: new Date(cursor),
       key,
-      value: isFuture ? null : countFor(key)
+      value: countFor(key)
     });
     cursor = addDays(cursor, 1);
   }
@@ -108,7 +107,8 @@ function niceStep(roughStep) {
 
 function labelForPoint(p, range, idx, points) {
   if (range === "week") {
-    return WEEKDAY_LABELS()[idx];
+    const dow = (p.date.getDay() + 6) % 7; // Monday = 0
+    return WEEKDAY_LABELS()[dow];
   }
   if (range === "month") {
     const day = p.date.getDate();
